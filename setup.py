@@ -3,7 +3,7 @@
 import sys
 from pathlib import Path
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 here = Path(__file__).parent.resolve()
 
@@ -32,8 +32,9 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3 :: Only',
     ],
+    platforms = ['any'],
     keywords='darwinex algorithmic trading quant quantitative analysis asyncio websockets darwins async',
-    packages=['darwinexapis'],
+    include_package_data=True,
     install_requires=['pandas',
                       'plotly', 
                       'matplotlib', 

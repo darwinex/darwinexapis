@@ -16,3 +16,6 @@ from .API.DarwinDataAnalyticsAPI.DWX_Data_Analytics_API import DWX_Darwin_Data_A
 
 # Minions:
 from .MINIONS.dwx_graphics_helpers import DWX_Graphics_Helpers
+
+# Apps:
+from .APPS.API_Helpers import TS_Calculations
