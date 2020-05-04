@@ -10,6 +10,7 @@ here = Path(__file__).parent.resolve()
 __version__ = None
 with open(here / 'version.py') as f:
     exec(f.read())
+print(here)
 
 with open(here / 'README.rst', encoding='utf-8') as f:
     long_description = f.read()
@@ -34,7 +35,10 @@ setup(
     ],
     platforms = ['any'],
     keywords='darwinex algorithmic trading quant quantitative analysis asyncio websockets darwins async',
+    #package_dir={"": "darwinexapis"},
     include_package_data=True,
+    packages=find_packages(),
+    #package_data={'darwinexapis':['*']},
     install_requires=['pandas',
                       'plotly', 
                       'matplotlib', 
