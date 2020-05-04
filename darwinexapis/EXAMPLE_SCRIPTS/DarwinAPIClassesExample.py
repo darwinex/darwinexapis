@@ -3,11 +3,11 @@ import os, pprint
 import pandas as pd
 
 ### Import the different classes:
-from darwinexAPIs.API.InfoAPI.DWX_Info_API import DWX_Info_API
-from darwinexAPIs.API.InvestorAccountInfoAPI.DWX_AccInfo_API import DWX_AccInfo_API
-from darwinexAPIs.API.QuotesAPI.DWX_Quotes_API import DWX_Quotes_API
-from darwinexAPIs.API.TradingAPI.DWX_Trading_API import DWX_Trading_API
-from darwinexAPIs.API.WebSocketAPI.DWX_WebSocket_API import DWX_WebSocket_API
+from darwinexapis.API.InfoAPI.DWX_Info_API import DWX_Info_API
+from darwinexapis.API.InvestorAccountInfoAPI.DWX_AccInfo_API import DWX_AccInfo_API
+from darwinexapis.API.QuotesAPI.DWX_Quotes_API import DWX_Quotes_API
+from darwinexapis.API.TradingAPI.DWX_Trading_API import DWX_Trading_API
+from darwinexapis.API.WebSocketAPI.DWX_WebSocket_API import DWX_WebSocket_API
 
 ### Let's create the access token variable:
 AUTH_CREDS = {'access_token': 'YOUR_ALPHA_TOKEN',

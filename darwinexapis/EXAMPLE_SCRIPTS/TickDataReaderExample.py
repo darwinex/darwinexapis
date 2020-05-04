@@ -3,7 +3,7 @@ import os, pprint
 import pandas as pd
 
 # Import the different classes:
-from darwinexAPIs.API.TickDataAPI.DWX_TickData_Reader_API import DWX_TickData_Reader_API
+from darwinexapis.API.TickDataAPI.DWX_TickData_Reader_API import DWX_TickData_Reader_API
 
 # Reader:
 bid_file_pkl = os.path.expandvars('${HOME}/Desktop/darwinexAPIs/darwinexAPIs/EXAMPLE_DATA/WS30_BID_2018-10-01_23.pkl')

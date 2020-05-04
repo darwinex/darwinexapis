@@ -2,7 +2,7 @@
 import os, pandas as pd
 
 # Import the class:
-from darwinexAPIs.API.DarwinDataAnalyticsAPI.DWX_Data_Analytics_API import DWX_Darwin_Data_Analytics_API
+from darwinexapis.API.DarwinDataAnalyticsAPI.DWX_Data_Analytics_API import DWX_Darwin_Data_Analytics_API
 
 # Create the object:
 CONFIG_PATH = os.path.expandvars('${HOME}/Desktop/darwinexAPIs/darwinexAPIs/API/DarwinDataAnalyticsAPI/FTP_DARWIN_Access_Credentials.cfg')

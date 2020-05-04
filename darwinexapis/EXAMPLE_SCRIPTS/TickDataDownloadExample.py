@@ -3,7 +3,7 @@ import os, pprint
 import pandas as pd
 
 # Import the different classes:
-from darwinexAPIs.API.TickDataAPI.DWX_TickData_Downloader_API import DWX_TickData_Downloader_API
+from darwinexapis.API.TickDataAPI.DWX_TickData_Downloader_API import DWX_TickData_Downloader_API
 
 # Let's create the access token variable:
 
