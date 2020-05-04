@@ -24,7 +24,7 @@ from matplotlib import pyplot as plt
 
 class DWX_Darwin_Data_Analytics_API():
     
-    '''This API has the ability to download '''
+    '''This API has the ability to download DARWIN data and analyze it.'''
 
     def __init__(self, config='<ENTER-FTP-CREDENTIALS-CFG-FILE-PATH-HERE>'):
         

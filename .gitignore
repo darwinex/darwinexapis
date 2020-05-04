@@ -1,0 +1,15 @@
+darwinexapis/__pycache__
+dist
+build
+.vscode
+.idea
+.settings
+.spyproject
+.project
+.pydevproject
+.mypy_cache
+.eggs
+docs/html/.buildinfo
+docs/html/.doctrees
+docs/doctrees
+darwinexapis.egg-info
