@@ -1,8 +1,11 @@
 darwinexapis/__pycache__
+__pycache__/
 dist
 build
 .vscode
 .idea
+.cpython
+.pyc
 .settings
 .spyproject
 .project
