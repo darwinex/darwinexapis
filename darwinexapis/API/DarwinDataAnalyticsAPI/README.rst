@@ -27,7 +27,7 @@ Example Usage & Tutorials
     import os, pandas as pd
 
     # Import the class:
-    from darwinexAPIs.API.DarwinDataAnalyticsAPI.DWX_Data_Analytics_API import DWX_Darwin_Data_Analytics_API
+    from darwinexapis.API.DarwinDataAnalyticsAPI.DWX_Data_Analytics_API import DWX_Darwin_Data_Analytics_API
 
     # Create the object:
     CONFIG_PATH = os.path.expandvars('${HOME}/FTP_DARWIN_Access_Credentials.cfg')
@@ -36,7 +36,7 @@ Example Usage & Tutorials
     # Download data of certain analytics variable:
     dataFrameReturned = ANALYZER.get_analytics(darwin='LVS', data_type='RETURN_DIVERGENCE')
     ANALYZER.save_data_to_csv(dataFrameReturned, 
-                              which_path=os.path.expandvars('${HOME}/darwinexAPIs/EXAMPLE_DATA/'), 
+                              which_path=os.path.expandvars('${HOME}/darwinexapis/EXAMPLE_DATA/'), 
                               filename='LVS_AVG_LEVERAGE')
     print(dataFrameReturned)
 
@@ -48,7 +48,7 @@ Example Usage & Tutorials
                                           month='01',
                                           year='2019')
     ANALYZER.save_data_to_csv(quotes, 
-                              which_path=os.path.expandvars('${HOME}/darwinexAPIs/EXAMPLE_DATA/'), 
+                              which_path=os.path.expandvars('${HOME}/darwinexapis/EXAMPLE_DATA/'), 
                               filename='LVS_Quotes')
     print(quotes.head()) 
 
