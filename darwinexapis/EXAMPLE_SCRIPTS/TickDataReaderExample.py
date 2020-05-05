@@ -6,9 +6,9 @@ import pandas as pd
 from darwinexapis.API.TickDataAPI.DWX_TickData_Reader_API import DWX_TickData_Reader_API
 
 # Reader:
-bid_file_pkl = os.path.expandvars('${HOME}/Desktop/darwinexAPIs/darwinexAPIs/EXAMPLE_DATA/WS30_BID_2018-10-01_23.pkl')
-ask_file_pkl = os.path.expandvars('${HOME}/Desktop/darwinexAPIs/darwinexAPIs/EXAMPLE_DATA/WS30_ASK_2018-10-01_23.pkl')
-path_to_save = os.path.expandvars('${HOME}/Desktop/darwinexAPIs/darwinexAPIs/EXAMPLE_DATA/')
+bid_file_pkl = os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/WS30_BID_2018-10-01_23.pkl')
+ask_file_pkl = os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/WS30_ASK_2018-10-01_23.pkl')
+path_to_save = os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/')
 
 # Generate the object: 
 READER = DWX_TickData_Reader_API(_bids_file=bid_file_pkl, 

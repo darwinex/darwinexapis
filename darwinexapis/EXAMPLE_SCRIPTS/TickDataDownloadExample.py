@@ -9,17 +9,17 @@ from darwinexapis.API.TickDataAPI.DWX_TickData_Downloader_API import DWX_TickDat
 
 FTP_CRED = {"username": "your_alpha_username",
             "password": "your_alpha_password",
-            "ftpServer": "tickdata.darwinex.com"}
+            "server": "tickdata.darwinex.com"}
 
 # Downloader:
 # Try other assets like: GDAXIm, SPN35, XAUUSD... > Watch out with the available dates!
 DOWNLOADER = DWX_TickData_Downloader_API(dwx_ftp_user=FTP_CRED['username'], 
                                          dwx_ftp_pass=FTP_CRED['password'],
-                                         dwx_ftp_hostname=FTP_CRED['ftpServer'],
+                                         dwx_ftp_hostname=FTP_CRED['server'],
                                          dwx_ftp_port=FTP_CRED['port'])
 
 # Create the path you wish to save the data:                                         
-path_to_save = os.path.expandvars('${HOME}/Desktop/darwinexAPIs/darwinexAPIs/EXAMPLE_DATA/')
+path_to_save = os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/')
 
 ###################################################
 

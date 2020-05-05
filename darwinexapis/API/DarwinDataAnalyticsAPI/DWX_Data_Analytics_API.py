@@ -26,7 +26,7 @@ class DWX_Darwin_Data_Analytics_API():
     
     '''This API has the ability to download DARWIN data and analyze it.'''
 
-    def __init__(self, config='<ENTER-FTP-CREDENTIALS-CFG-FILE-PATH-HERE>'):
+    def __init__(self, dwx_ftp_user, dwx_ftp_pass, dwx_ftp_hostname, dwx_ftp_port):
         
         """Initialize variables, setup byte buffer and FTP connection.
         
@@ -60,18 +60,9 @@ class DWX_Darwin_Data_Analytics_API():
         # Setup data access mode (file or FTP)
         self.mode = 0 # Default is file.
         
-        def load_config(_filename=''):
-            return {_key: _value for _key, _value\
-                    in (l.replace('\n','').split('=')\
-                        for l in open(_filename))}
-
-        # FTP credentials
-        self.ftp_credentials = load_config(config)
-        
         try:
-            self.server = FTP(self.ftp_credentials['server'])
-            self.server.login(self.ftp_credentials['username'],
-                              self.ftp_credentials['password'])
+            self.server = FTP(dwx_ftp_hostname)
+            self.server.login(dwx_ftp_user, dwx_ftp_pass)
             
             # 200+ codes signify success.
             if str(self.server.lastresp).startswith('2'):
