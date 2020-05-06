@@ -96,9 +96,9 @@ class DWX_TickData_Reader_API():
             _df[f'{self._asset_name}_mid_price'] = round((_df[self._ask_price_col_name] + _df[self._bid_price_col_name]) / 2, _symbol_digits)
             
             if _precision not in ['B','C','D','W','24H']:
-                _df = _df.mid_price.resample(rule=_precision).ohlc()
+                _df = _df[f'{self._asset_name}_mid_price'].resample(rule=_precision).ohlc()
             else:
-                _df = _df.mid_price.resample(rule=_precision, base=_daily_start).ohlc().dropna()
+                _df = _df[f'{self._asset_name}_mid_price'].resample(rule=_precision, base=_daily_start).ohlc().dropna()
             
         # Check data integrity?
         if _check_integrity:
@@ -135,7 +135,7 @@ class DWX_TickData_Reader_API():
             print(_diff.value_counts().head(1))
             
             print('\n[TEST #3] Hourly Spread Distribution\n--')
-            _df.groupby(_df.index.hour).spread.mean().plot(
+            _df.groupby(_df.index.hour)[f'{self._asset_name}_mid_price'].mean().plot(
                     xticks=range(0,24), 
                     title='Average Spread by Hour (UTC)')
 
