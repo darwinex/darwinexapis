@@ -52,7 +52,7 @@ dependencies:
     - click==7.1.2
     - cryptography==2.9.2
     - cycler==0.10.0
-    - darwinexapis==0.2.7
+    - darwinexapis==0.2.8
     - dash==1.11.0
     - dash-core-components==1.9.1
     - dash-html-components==1.0.3

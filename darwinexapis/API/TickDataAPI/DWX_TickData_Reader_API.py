@@ -33,7 +33,7 @@ class DWX_TickData_Reader_API():
         
         # Get the symbol:
         self._file_name_csv = _bids_file.split('/')[-1].replace('BID', 'BID_ASK').replace('pkl', 'csv')
-        self._asset_name = _bids_file.split('_')[0]
+        self._asset_name = _bids_file.split('/')[-1].split('_')[0]
         
         # Fix some variables:
         self._bid_price_col_name = f'{self._asset_name}_bid_price'
