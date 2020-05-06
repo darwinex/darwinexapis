@@ -135,7 +135,7 @@ class DWX_TickData_Reader_API():
             print(_diff.value_counts().head(1))
             
             print('\n[TEST #3] Hourly Spread Distribution\n--')
-            _df.groupby(_df.index.hour)[f'{self._asset_name}_mid_price'].mean().plot(
+            _df.groupby(_df.index.hour)[f'{self._asset_name}_spread'].mean().plot(
                     xticks=range(0,24), 
                     title='Average Spread by Hour (UTC)')
 

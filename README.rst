@@ -96,12 +96,6 @@ If you want to install the package in development mode, you just need to change 
 
     pip install -e .
 
-Alternatively, you can install miniconda `Miniconda <https://docs.conda.io/en/latest/miniconda.html>`_ and then create an environment with the following command:
-
-::
-
-    conda env create -f your_alpha_env.yml
-
 Example DARWIN API Suite
 ========================
 
