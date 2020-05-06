@@ -33,7 +33,14 @@ class DWX_TickData_Reader_API():
         
         # Get the symbol:
         self._file_name_csv = _bids_file.split('/')[-1].replace('BID', 'BID_ASK').replace('pkl', 'csv')
+        self._asset_name = _bids_file.split('_')[0]
         
+        # Fix some variables:
+        self._bid_price_col_name = f'{self._asset_name}_bid_price'
+        self._ask_price_col_name = f'{self._asset_name}_ask_price'
+        self._bid_size_col_name = f'{self._asset_name}_bid_size'
+        self._ask_size_col_name = f'{self._asset_name}_ask_size'
+
         # Define the variables:
         self._bids_file = _bids_file
         self._asks_file = _asks_file
@@ -43,18 +50,18 @@ class DWX_TickData_Reader_API():
         _df = pd.read_pickle(_filename)
         
         if 'BID' in _filename:
-            _df.columns = ['bid_price','bid_size']
+            _df.columns = [self._bid_price_col_name,self._bid_size_col_name]
         elif 'ASK' in _filename:
-            _df.columns = ['ask_price','ask_size']
+            _df.columns = [self._ask_price_col_name,self._ask_size_col_name]
             
-        _df.index.name = 'timestamp'
+        _df.index.name = f'{self._asset_name}_timestamp'
         
         return _df.apply(pd.to_numeric)
     
     def _get_symbol_as_dataframe_(self, _convert_epochs=True,
                                         _check_integrity=False,
                                         _calc_spread = False,
-                                        _reindex=['ask_price','bid_price'],
+                                        _reindex=[],
                                         _precision='tick',
                                         _daily_start=22,
                                         _symbol_digits=5):
@@ -74,7 +81,7 @@ class DWX_TickData_Reader_API():
             
         # Calculate spread?
         if _calc_spread:
-            _df['spread'] = abs(np.diff(_df[['ask_price','bid_price']]))
+            _df[f'{self._asset_name}_spread'] = abs(np.diff(_df[[self._ask_price_col_name,self._bid_price_col_name]]))
         
         # Convert timestamps?
         if _convert_epochs:
@@ -86,7 +93,7 @@ class DWX_TickData_Reader_API():
             
         # Resample?
         if _precision != 'tick':
-            _df['mid_price'] = round((_df.ask_price + _df.bid_price) / 2, _symbol_digits)
+            _df[f'{self._asset_name}_mid_price'] = round((_df[self._ask_price_col_name] + _df[self._bid_price_col_name]) / 2, _symbol_digits)
             
             if _precision not in ['B','C','D','W','24H']:
                 _df = _df.mid_price.resample(rule=_precision).ohlc()
