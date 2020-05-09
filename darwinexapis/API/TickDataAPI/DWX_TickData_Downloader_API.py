@@ -73,9 +73,6 @@ class DWX_TickData_Downloader_API(object):
 
             self._virtual_dl.seek(0)
             _log = gzip.open(self._virtual_dl)
-
-            # Close the file
-            self._virtual_dl.close()
                 
             # Get bytes into local DB as list of lists
             self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -91,6 +88,9 @@ class DWX_TickData_Downloader_API(object):
             
             if _verbose is True:
                 print('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+
+            # Close the file
+            self._virtual_dl.close()
 
             # Return the data:
             return self._return_pandas_dataframe_()
@@ -122,9 +122,6 @@ class DWX_TickData_Downloader_API(object):
                 
             self._virtual_dl.seek(0)
             _log = gzip.open(self._virtual_dl)
-
-            # Close the file
-            self._virtual_dl.close()
                 
             # Get bytes into local DB as list of lists
             self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -140,6 +137,9 @@ class DWX_TickData_Downloader_API(object):
             
             if _verbose is True:
                 print('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+
+            # Close the file
+            self._virtual_dl.close()
 
             # Return the data:
             return self._return_pandas_dataframe_()
@@ -179,9 +179,6 @@ class DWX_TickData_Downloader_API(object):
                 
                 self._virtual_dl.seek(0)
                 _log = gzip.open(self._virtual_dl)
-
-                # Close the file
-                self._virtual_dl.close()
                 
                 # Get bytes into local DB as list of lists
                 self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -204,6 +201,9 @@ class DWX_TickData_Downloader_API(object):
 
                 # Concat the data:
                 full_dataframe = full_dataframe.append(hour_df_data)
+
+                # Close the file
+                self._virtual_dl.close()
         
             # Case: if file not found
             except Exception as ex:
@@ -243,9 +243,6 @@ class DWX_TickData_Downloader_API(object):
                 
                 self._virtual_dl.seek(0)
                 _log = gzip.open(self._virtual_dl)
-
-                # Close the file
-                self._virtual_dl.close()
                 
                 # Get bytes into local DB as list of lists
                 self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -268,6 +265,9 @@ class DWX_TickData_Downloader_API(object):
 
                 # Concat the data:
                 full_dataframe = full_dataframe.append(hour_df_data)
+
+                # Close the file
+                self._virtual_dl.close()
         
             # Case: if file not found
             except Exception as ex:
@@ -329,9 +329,6 @@ class DWX_TickData_Downloader_API(object):
                 
                     self._virtual_dl.seek(0)
                     _log = gzip.open(self._virtual_dl)
-
-                    # Close the file
-                    self._virtual_dl.close()
                 
                     # Get bytes into local DB as list of lists
                     self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -354,6 +351,9 @@ class DWX_TickData_Downloader_API(object):
 
                     # Concat the data:
                     full_dataframe = full_dataframe.append(hour_df_data)
+
+                    # Close the file
+                    self._virtual_dl.close()
         
                 # Case: if file not found
                 except Exception as ex:
@@ -402,9 +402,6 @@ class DWX_TickData_Downloader_API(object):
                 
                     self._virtual_dl.seek(0)
                     _log = gzip.open(self._virtual_dl)
-
-                    # Close the file
-                    self._virtual_dl.close()
                 
                     # Get bytes into local DB as list of lists
                     self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -427,6 +424,9 @@ class DWX_TickData_Downloader_API(object):
 
                     # Concat the data:
                     full_dataframe = full_dataframe.append(hour_df_data)
+
+                    # Close the file
+                    self._virtual_dl.close()
         
                 # Case: if file not found
                 except Exception as ex:
