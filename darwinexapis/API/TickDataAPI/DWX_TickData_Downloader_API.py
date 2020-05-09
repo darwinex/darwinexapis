@@ -73,6 +73,9 @@ class DWX_TickData_Downloader_API(object):
 
             self._virtual_dl.seek(0)
             _log = gzip.open(self._virtual_dl)
+
+            # Close the file
+            self._virtual_dl.close()
                 
             # Get bytes into local DB as list of lists
             self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -119,6 +122,9 @@ class DWX_TickData_Downloader_API(object):
                 
             self._virtual_dl.seek(0)
             _log = gzip.open(self._virtual_dl)
+
+            # Close the file
+            self._virtual_dl.close()
                 
             # Get bytes into local DB as list of lists
             self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -173,6 +179,9 @@ class DWX_TickData_Downloader_API(object):
                 
                 self._virtual_dl.seek(0)
                 _log = gzip.open(self._virtual_dl)
+
+                # Close the file
+                self._virtual_dl.close()
                 
                 # Get bytes into local DB as list of lists
                 self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -234,6 +243,9 @@ class DWX_TickData_Downloader_API(object):
                 
                 self._virtual_dl.seek(0)
                 _log = gzip.open(self._virtual_dl)
+
+                # Close the file
+                self._virtual_dl.close()
                 
                 # Get bytes into local DB as list of lists
                 self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -317,6 +329,9 @@ class DWX_TickData_Downloader_API(object):
                 
                     self._virtual_dl.seek(0)
                     _log = gzip.open(self._virtual_dl)
+
+                    # Close the file
+                    self._virtual_dl.close()
                 
                     # Get bytes into local DB as list of lists
                     self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
@@ -387,6 +402,9 @@ class DWX_TickData_Downloader_API(object):
                 
                     self._virtual_dl.seek(0)
                     _log = gzip.open(self._virtual_dl)
+
+                    # Close the file
+                    self._virtual_dl.close()
                 
                     # Get bytes into local DB as list of lists
                     self._asset_db[_key] = [line.strip().decode().split(',') for line in _log]
