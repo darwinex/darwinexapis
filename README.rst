@@ -277,7 +277,7 @@ Disclaimer
 
 The software is provided on the conditions of the BSD license that you can find inside the package.
 
-**¡The αlpha's time has begun!**
+**The αlpha's time has begun!**
 
 :Author: Darwinex Alpha Team <content@darwinex.com>
 

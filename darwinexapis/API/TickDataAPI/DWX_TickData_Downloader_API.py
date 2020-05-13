@@ -92,6 +92,9 @@ class DWX_TickData_Downloader_API(object):
             if _verbose is True:
                 logger.warning('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
 
+            # Close the file
+            self._virtual_dl.close()
+
             # Return the data:
             return self._return_pandas_dataframe_()
         
@@ -137,6 +140,9 @@ class DWX_TickData_Downloader_API(object):
             
             if _verbose is True:
                 logger.warning('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+
+            # Close the file
+            self._virtual_dl.close()
 
             # Return the data:
             return self._return_pandas_dataframe_()
@@ -198,6 +204,9 @@ class DWX_TickData_Downloader_API(object):
 
                 # Concat the data:
                 full_dataframe = full_dataframe.append(hour_df_data)
+
+                # Close the file
+                self._virtual_dl.close()
         
             # Case: if file not found
             except Exception as ex:
@@ -259,6 +268,9 @@ class DWX_TickData_Downloader_API(object):
 
                 # Concat the data:
                 full_dataframe = full_dataframe.append(hour_df_data)
+
+                # Close the file
+                self._virtual_dl.close()
         
             # Case: if file not found
             except Exception as ex:
@@ -342,6 +354,9 @@ class DWX_TickData_Downloader_API(object):
 
                     # Concat the data:
                     full_dataframe = full_dataframe.append(hour_df_data)
+
+                    # Close the file
+                    self._virtual_dl.close()
         
                 # Case: if file not found
                 except Exception as ex:
@@ -412,6 +427,9 @@ class DWX_TickData_Downloader_API(object):
 
                     # Concat the data:
                     full_dataframe = full_dataframe.append(hour_df_data)
+
+                    # Close the file
+                    self._virtual_dl.close()
         
                 # Case: if file not found
                 except Exception as ex:
