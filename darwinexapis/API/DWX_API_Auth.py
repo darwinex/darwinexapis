@@ -1,6 +1,8 @@
 ### Do some imports:
 import os, pprint, json, base64, requests, time
 import pandas as pd
+import logging
+logger = logging.getLogger()
 
 class DWX_API_AUTHENTICATION(object):
 
@@ -29,7 +31,7 @@ class DWX_API_AUTHENTICATION(object):
 
         # Put 60 seconds to request the new one and start from there:
         self.expires_in = time.time() + 60
-        print(f'[INIT] - Access token will be created again at {self.expires_in} UNIX timestamp')
+        logger.warning(f'[INIT] - Access token will be created again at {self.expires_in} UNIX timestamp')
  
     def _get_access_refresh_tokens_wrapper(self):
 
@@ -44,26 +46,26 @@ class DWX_API_AUTHENTICATION(object):
 
                 raise Exception("[INIT] - Request for access token failed > No access_token returned in the response")
 
-            #print(f'[REFRESH] - New access_token > {self.access_token}')
-            #print(f'[REFRESH] - New expires_in > {self.expires_in}')
-            #print(f'[REFRESH] - New refresh_token > {self.refresh_token}')
+            #logger.warning(f'[REFRESH] - New access_token > {self.access_token}')
+            #logger.warning(f'[REFRESH] - New expires_in > {self.expires_in}')
+            #logger.warning(f'[REFRESH] - New refresh_token > {self.refresh_token}')
 
-            print("[INIT] - Will sleep for some secs...")
+            logger.warning("[INIT] - Will sleep for some secs...")
             time.sleep(3)
 
         except Exception as ex:
-            print(ex)
+            logger.warning(ex)
 
         else:
             # It is useful for code that must be executed if the try clause does not raise an exception.
-            print("[REFRESH_ELSE] - Will RESET the expires_in variable...")
+            logger.warning("[REFRESH_ELSE] - Will RESET the expires_in variable...")
             self.expires_in = time.time() + (self.expires_in - 300)
 
             # Put new credentials:
-            print("[REFRESH_ELSE] - Will add the new access_token and refresh_token to the dictionary")
+            logger.warning("[REFRESH_ELSE] - Will add the new access_token and refresh_token to the dictionary")
             self._auth_creds['access_token'] = self.access_token
             self._auth_creds['refresh_token'] = self.refresh_token
-            #print(f"[REFRESH_ELSE] - NEW CREDS: {self._auth_creds}")
+            #logger.warning(f"[REFRESH_ELSE] - NEW CREDS: {self._auth_creds}")
 
     def _get_access_refresh_tokens_(self, client_id, client_secret, refresh_token, token_url='https://api.darwinex.com/token'):
 
@@ -85,14 +87,14 @@ class DWX_API_AUTHENTICATION(object):
             # Optional: Raise an exception if a request is unsuccessful:
             _response.raise_for_status()
 
-            print('[GET_TOKENS] - Access & Refresh Tokens Retrieved Successfully')
+            logger.warning('[GET_TOKENS] - Access & Refresh Tokens Retrieved Successfully')
             
             response_json = json.loads(_response.text)
-            #print(f'[GET_TOKENS] - RETURNED RESPONSE IN TEXT: {response_json}')
+            #logger.warning(f'[GET_TOKENS] - RETURNED RESPONSE IN TEXT: {response_json}')
             return response_json['access_token'], response_json['expires_in'], response_json['refresh_token']
             
         except Exception as ex:
 
-            print('[GET_TOKENS] - Access & Refresh Tokens ***NOT*** Retrieved Successfully')
-            print('Type: {0}, Args: {1!r}'.format(type(ex).__name__, ex.args))
+            logger.warning('[GET_TOKENS] - Access & Refresh Tokens ***NOT*** Retrieved Successfully')
+            logger.warning('Type: {0}, Args: {1!r}'.format(type(ex).__name__, ex.args))
             return None, None, None

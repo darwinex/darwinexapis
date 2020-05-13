@@ -17,6 +17,8 @@
 import plotly.offline as po
 import plotly.graph_objs as go
 import matplotlib.ticker as ticker
+import logging
+logger = logging.getLogger()
 
 class DWX_Graphics_Helpers():
     
@@ -72,11 +74,6 @@ class DWX_Graphics_Helpers():
         
     def _generate_scatter_list_(self, _df):
         
-        return [self._generate_scatter_single_(
-                        _df = _df[_darwin],
-                        _name = _darwin
-                    ) for _darwin in _df.columns]
-        
         """
         return [go.Scatter(
                         x = _df.index,
@@ -84,6 +81,11 @@ class DWX_Graphics_Helpers():
                         name = _darwin) 
                     for _darwin in _df.columns]
         """
+
+        return [self._generate_scatter_single_(
+                        _df = _df[_darwin],
+                        _name = _darwin
+                    ) for _darwin in _df.columns]
         
     ##########################################################################
     
@@ -153,7 +155,7 @@ class DWX_Graphics_Helpers():
             _data = self._generate_scatter_list_(_df)
             
         else:
-            print('[ERROR] Can\'t plot thin air I\'m afraid... :)')
+            logger.warning('[ERROR] Can\'t plot thin air I\'m afraid... :)')
             return None
     
         # Setup Layout
@@ -203,7 +205,7 @@ class DWX_Graphics_Helpers():
                            _annotations=[]):
         
         if _t1_data is None or _t2_data is None:
-            print('[ÈRROR] You must provide lists of Scatter objects to proceed.')
+            logger.warning('[ÈRROR] You must provide lists of Scatter objects to proceed.')
             return None
         
         _data = _t1_data + _t2_data

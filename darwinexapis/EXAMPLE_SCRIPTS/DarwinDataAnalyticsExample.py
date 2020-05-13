@@ -1,5 +1,7 @@
 # Do some imports:
 import os, pandas as pd
+import logging
+logger = logging.getLogger()
 
 # Import the class:
 from darwinexapis.API.DarwinDataAnalyticsAPI.DWX_Data_Analytics_API import DWX_Darwin_Data_Analytics_API
@@ -18,7 +20,7 @@ ANALYZER = DWX_Darwin_Data_Analytics_API(dwx_ftp_user=FTP_CRED['username'],
 # Download data of certain analytics variable:
 dataFrameReturned = ANALYZER.get_analytics(darwin='LVS', data_type='RETURN_DIVERGENCE')
 ANALYZER.save_data_to_csv(dataFrameReturned, which_path=os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/'), filename='LVS_AVG_LEVERAGE')
-print(dataFrameReturned)
+logger.warning(dataFrameReturned)
 
 # Get quote date for DARWINs:
 # This call will get all the data and will take some time to execute.
@@ -28,4 +30,4 @@ quotes = ANALYZER.get_quotes_from_ftp(darwin='PLF',
                                       month='01',
                                       year='2019')
 ANALYZER.save_data_to_csv(quotes, which_path=os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/'), filename='LVS_Quotes')
-print(quotes.head())                                      
+logger.warning(quotes.head())                                      

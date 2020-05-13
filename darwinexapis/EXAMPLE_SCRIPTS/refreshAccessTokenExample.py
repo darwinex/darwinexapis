@@ -1,5 +1,7 @@
 
 import json, base64, requests, pprint
+import logging
+logger = logging.getLogger()
 
 class DWX_OAuth2():
     
@@ -26,14 +28,14 @@ class DWX_OAuth2():
         try:
             _response = requests.post(token_url, headers=headers, data=data, verify=True, allow_redirects=False)
             
-            print('[KERNEL] Access & Refresh Tokens Retrieved Successfully')
+            logger.warning('[KERNEL] Access & Refresh Tokens Retrieved Successfully')
             
             response_json = json.loads(_response.text)
             #return response_json
             return response_json['access_token'], response_json['expires_in'], response_json['refresh_token']
             
         except Exception as ex:
-            print('Type: {0}, Args: {1!r}'.format(type(ex).__name__, ex.args))
+            logger.warning('Type: {0}, Args: {1!r}'.format(type(ex).__name__, ex.args))
             return None
     
     ##########################################################################

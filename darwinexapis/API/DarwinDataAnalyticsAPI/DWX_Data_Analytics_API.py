@@ -22,6 +22,9 @@ from ftplib import FTP
 from io import BytesIO
 from matplotlib import pyplot as plt
 
+import logging
+logger = logging.getLogger()
+
 class DWX_Darwin_Data_Analytics_API():
     
     '''This API has the ability to download DARWIN data and analyze it.'''
@@ -66,13 +69,13 @@ class DWX_Darwin_Data_Analytics_API():
             
             # 200+ codes signify success.
             if str(self.server.lastresp).startswith('2'):
-                print('[KERNEL] FTP Connection Successful. Data will now be pulled from Darwinex FTP Server.')
+                logger.warning('[KERNEL] FTP Connection Successful. Data will now be pulled from Darwinex FTP Server.')
                 self.mode = 1 # 1 = FTP, 0
             
-            print(f'[KERNEL] Last FTP Status Code: {self.server.lastresp} | Please consult https://en.wikipedia.org/wiki/List_of_FTP_server_return_codes for code definitions.')
+            logger.warning(f'[KERNEL] Last FTP Status Code: {self.server.lastresp} | Please consult https://en.wikipedia.org/wiki/List_of_FTP_server_return_codes for code definitions.')
                 
         except Exception as ex:
-            print(f'Exception: {ex}')
+            logger.warning(f'Exception: {ex}')
             exit(-1)
                 
     ##########################################################################
@@ -151,10 +154,10 @@ class DWX_Darwin_Data_Analytics_API():
         --
         """
         if self.mode == 0:
-            print(f'Retrieving data from file for DARWIN {darwin}...')
+            logger.warning(f'Retrieving data from file for DARWIN {darwin}...')
             return pd.read_csv(f'{str(darwin).upper()}/{str(data_type).upper()}', header=None)
         else:
-            print(f'Retrieving data from FTP Server for DARWIN {darwin}...')
+            logger.warning(f'Retrieving data from FTP Server for DARWIN {darwin}...')
             return self.get_data_from_ftp(str(darwin).upper(), str(data_type).upper())
     
     def save_data_to_csv(self, dataframe_to_save, which_path, filename):
@@ -492,7 +495,7 @@ class DWX_Darwin_Data_Analytics_API():
                     quote_files += [f'{darwin}/quotes/{root}/{root_file}'\
                                     for root_file in root_files if '{}.{}'.format(darwin, suffix) in root_file]
                 except Exception as ex:
-                    print(ex)
+                    logger.warning(ex)
                     return
             
         elif pd.to_numeric(month) > 0 and pd.to_numeric(year) > 2010:
@@ -505,10 +508,10 @@ class DWX_Darwin_Data_Analytics_API():
                 quote_files = [f'{darwin}/quotes/{year}-{month}/{quote_file}'\
                                     for quote_file in quote_files if '{}.{}'.format(darwin, suffix) in quote_file]
             except Exception as ex:
-                print(ex)
+                logger.warning(ex)
                 return
         else:
-            print('\n[ERROR] Please either set monthly=True or ensure both month and year have integer values')
+            logger.warning('\n[ERROR] Please either set monthly=True or ensure both month and year have integer values')
             return
             
         # Process tick data files
@@ -532,7 +535,7 @@ class DWX_Darwin_Data_Analytics_API():
                 ticks_df = pd.concat([ticks_df, pd.DataFrame(ret[1:])], axis=0)
                 
             except Exception as ex:
-                print(ex)
+                logger.warning(ex)
         
         # Clean up
         ticks_df.columns = ['timestamp','quote']

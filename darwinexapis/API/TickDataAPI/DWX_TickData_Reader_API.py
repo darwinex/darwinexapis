@@ -21,6 +21,9 @@ import numpy as np
 import gzip, os
 import matplotlib.pyplot as plt
 
+import logging
+logger = logging.getLogger()
+
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 
@@ -103,7 +106,7 @@ class DWX_TickData_Reader_API():
         # Check data integrity?
         if _check_integrity:
             
-            print('\n\n[INFO] Checking data integrity..')
+            logger.warning('\n\n[INFO] Checking data integrity..')
             self._integrity_check_(_df)
         
         return _df
@@ -122,19 +125,19 @@ class DWX_TickData_Reader_API():
         
         if isinstance(_df, pd.DataFrame) == False:
             
-            print('[ERROR] Input must be a Pandas DataFrame')
+            logger.warning('[ERROR] Input must be a Pandas DataFrame')
             
         else:
             
             _diff = _df.index.to_series().diff()
             
-            print('\n[TEST #1] Data Frequency Statistics\n--')
-            print(_diff.describe())
+            logger.warning('\n[TEST #1] Data Frequency Statistics\n--')
+            logger.warning(_diff.describe())
             
-            print('\n[TEST #2] Mode of Gap Distribution\n--')
-            print(_diff.value_counts().head(1))
+            logger.warning('\n[TEST #2] Mode of Gap Distribution\n--')
+            logger.warning(_diff.value_counts().head(1))
             
-            print('\n[TEST #3] Hourly Spread Distribution\n--')
+            logger.warning('\n[TEST #3] Hourly Spread Distribution\n--')
             _df.groupby(_df.index.hour)[f'{self._asset_name}_spread'].mean().plot(
                     xticks=range(0,24), 
                     title='Average Spread by Hour (UTC)')

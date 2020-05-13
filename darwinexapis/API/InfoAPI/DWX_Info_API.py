@@ -23,6 +23,9 @@ from darwinexapis.API.dwx_api import DWX_API
 import pandas as pd
 import numpy as np
 
+import logging
+logger = logging.getLogger()
+
 pd.set_option('display.width', 1000)
 pd.set_option('display.max_columns', 500)
 
@@ -52,7 +55,7 @@ class DWX_Info_API(DWX_API):
             
             for darwin in _symbols:
                 
-                print('\r[DarwinInfoAPI] Getting Quotes for DARWIN {} / {}: ${}'.format(_count, len(_symbols), darwin), 
+                logger.warning('\r[DarwinInfoAPI] Getting Quotes for DARWIN {} / {}: ${}'.format(_count, len(_symbols), darwin), 
                       end='', flush=True)
                 
                 try:
@@ -88,10 +91,10 @@ class DWX_Info_API(DWX_API):
                     
                 except Exception as ex:
                     
-                    print('[ERROR] Something went wrong while looking up ${}'.format(darwin))
+                    logger.warning('[ERROR] Something went wrong while looking up ${}'.format(darwin))
                     _exstr = "Exception Type {0}. Args:\n{1!r}"
                     _msg = _exstr.format(type(ex).__name__, ex.args)
-                    print(_msg)
+                    logger.warning(_msg)
                     continue
                 
                 # Update counter
@@ -111,7 +114,7 @@ class DWX_Info_API(DWX_API):
             return _retdf
             
         else:
-            print('[ERROR] Please specify symbols as Python list []')    
+            logger.warning('[ERROR] Please specify symbols as Python list []')    
         
     ######################################################################### 
     
@@ -135,7 +138,7 @@ class DWX_Info_API(DWX_API):
             
             for darwin in _symbols:
                 
-                print('\r[DarwinInfoAPI] Getting Scores for DARWIN {} / {}: ${}'.format(_count, len(_symbols), darwin),
+                logger.warning('\r[DarwinInfoAPI] Getting Scores for DARWIN {} / {}: ${}'.format(_count, len(_symbols), darwin),
                       end='', flush=True)
                 
                 try:
@@ -165,10 +168,10 @@ class DWX_Info_API(DWX_API):
                     
                 except Exception as ex:
                     
-                    print('[ERROR] Something went wrong while looking up ${}'.format(darwin))
+                    logger.warning('[ERROR] Something went wrong while looking up ${}'.format(darwin))
                     _exstr = "Exception Type {0}. Args:\n{1!r}"
                     _msg = _exstr.format(type(ex).__name__, ex.args)
-                    print(_msg)
+                    logger.warning(_msg)
                     continue
                 
                 # Update counter
@@ -189,7 +192,7 @@ class DWX_Info_API(DWX_API):
             return _dict
         
         else:
-            print('[ERROR] Please specify symbols as Python list []')    
+            logger.warning('[ERROR] Please specify symbols as Python list []')    
     
     #########################################################################
 
@@ -204,7 +207,7 @@ class DWX_Info_API(DWX_API):
     
         # Get first batch
         try:
-            print('[DarwinInfoAPI] Getting first {} DARWINs..'.format(_perPage))
+            logger.warning('[DarwinInfoAPI] Getting first {} DARWINs..'.format(_perPage))
             _darwins = self._Call_API_(_endpoint \
                                       .format(_query_string \
                                               .format(_status, _page, _perPage)), 
@@ -214,7 +217,7 @@ class DWX_Info_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
             return None
             
         if _iterate:
@@ -225,13 +228,13 @@ class DWX_Info_API(DWX_API):
             # Keep 'content' list of DARWINs, discard everything else
             _darwins = _darwins['content']
             
-            print('[DarwinInfoAPI] {} pages of {} DARWINs each found.. iterating, stand by! :muscle:\n'
+            logger.warning('[DarwinInfoAPI] {} pages of {} DARWINs each found.. iterating, stand by! :muscle:\n'
                   .format(_pages, _perPage))
             
             # Iterate
             for i in range(_page + 1, _pages):
                 
-                print('\r[DarwinInfoAPI] Getting page {} of {}'.format(i+1, _pages), end='', flush=True)
+                logger.warning('\r[DarwinInfoAPI] Getting page {} of {}'.format(i+1, _pages), end='', flush=True)
                 
                 try:
                     _darwins = _darwins + self._Call_API_(_endpoint \
@@ -247,7 +250,7 @@ class DWX_Info_API(DWX_API):
                 except Exception as ex:
                     _exstr = "Exception Type {0}. Args:\n{1!r}"
                     _msg = _exstr.format(type(ex).__name__, ex.args)
-                    print(_msg)
+                    logger.warning(_msg)
                     continue
                 
         # Return dict
@@ -313,7 +316,7 @@ class DWX_Info_API(DWX_API):
         # Execute
         while _json['page'] != -1:
             
-            print('\r[DarwinInfoAPI] Getting page {} of DARWINs that satisfy criteria..' \
+            logger.warning('\r[DarwinInfoAPI] Getting page {} of DARWINs that satisfy criteria..' \
                   .format(_json['page']), end='', flush=True)
             
             try:
@@ -335,7 +338,7 @@ class DWX_Info_API(DWX_API):
                     _json['page'] = -1 # done
                 
             except AssertionError:
-                print('[ERROR] name, period, min and max lists must be the same length.')
+                logger.warning('[ERROR] name, period, min and max lists must be the same length.')
                 return None
        
         # Return DataFrame
@@ -383,7 +386,7 @@ class DWX_Info_API(DWX_API):
             _query_string = f'{_timeframe}?resolution={_resolution}'
         
         else:
-            print('[KERNEL] Inputs not recognized.. please try again.')
+            logger.warning('[KERNEL] Inputs not recognized.. please try again.')
             return None
             
         _candles = {}
@@ -391,7 +394,7 @@ class DWX_Info_API(DWX_API):
         for _darwin in _symbols:
             
             try:
-                print('[DarwinInfoAPI] Getting Candles for {}..'.format(_darwin))
+                logger.warning('[DarwinInfoAPI] Getting Candles for {}..'.format(_darwin))
                 _d = self._Call_API_(_endpoint \
                                           .format(_darwin, 
                                                   _query_string), 
@@ -409,7 +412,7 @@ class DWX_Info_API(DWX_API):
             except Exception as ex:
                 _exstr = "Exception Type {0}. Args:\n{1!r}"
                 _msg = _exstr.format(type(ex).__name__, ex.args)
-                print(_msg)
+                logger.warning(_msg)
                 return None
         
         return _candles

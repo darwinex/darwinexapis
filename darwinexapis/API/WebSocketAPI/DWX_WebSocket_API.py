@@ -17,6 +17,8 @@
 
 # Do some imports:
 import os, time, sys
+import logging
+logger = logging.getLogger()
 
 from darwinexapis.API.dwx_api import DWX_API
 import websockets, json, asyncio
@@ -40,7 +42,7 @@ class DWX_WebSocket_API(DWX_API):
     
     async def subscribe(self, _symbols=['DWZ.4.7','DWC.4.20','LVS.4.20','SYO.4.24','YZZ.4.20']):
         
-        #print(f'[SUBSCRIBE_UP] - AUTH_HEADERS: {self._auth_headers}')
+        #logger.warning(f'[SUBSCRIBE_UP] - AUTH_HEADERS: {self._auth_headers}')
 
         async with websockets.connect(self._api_url, extra_headers=self._auth_headers) as websocket:
 
@@ -53,16 +55,16 @@ class DWX_WebSocket_API(DWX_API):
                # If the time is greater that the time + the expires in > issue refresh:s
                 if time.time() > self.AUTHENTICATION.expires_in:
 
-                    print('\n[SUBSCRIBE] - The expiration time has REACHED > ¡Generate TOKENS!')
+                    logger.warning('\n[SUBSCRIBE] - The expiration time has REACHED > ¡Generate TOKENS!')
                     # Generate new token:
                     self.AUTHENTICATION._get_access_refresh_tokens_wrapper()
 
                     # Re-run the loop:
-                    print('[SUBSCRIBE] - Need to re-run the loop with new TOKENS...')
+                    logger.warning('[SUBSCRIBE] - Need to re-run the loop with new TOKENS...')
                     return
 
                 else:
-                    print('\n[SUBSCRIBE] - The expiration time has NOT reached yet > Continue...')
+                    logger.warning('\n[SUBSCRIBE] - The expiration time has NOT reached yet > Continue...')
 
                 # Keep returning:
                 _ret = await websocket.recv()
@@ -70,7 +72,7 @@ class DWX_WebSocket_API(DWX_API):
                 # Insert your Quote handling logic here
                 # {"op":"hb","timestamp":1587838905842} > Heartbeats.
                 # Reference: https://api.darwinex.com/store/site/pages/doc-viewer.jag?docName=Product%20Quotes%20WebSocket%20subscription%20walkthrough&name=QuoteWebSocket&version=1.0.0&provider=admin&
-                print(_ret)
+                logger.warning(_ret)
 
     def run(self, _symbols=['DWZ.4.7','DWC.4.20','LVS.4.20','SYO.4.24','YZZ.4.20']):
         
@@ -82,21 +84,21 @@ class DWX_WebSocket_API(DWX_API):
 
         except RuntimeError as ex:
 
-            print(f'[RUNTIME ERROR] > {ex}')
+            logger.warning(f'[RUNTIME ERROR] > {ex}')
             
         except KeyboardInterrupt:
 
-            print('[EXCEPTION] > ¡KeyboardInterrupt Exception!')
+            logger.warning('[EXCEPTION] > ¡KeyboardInterrupt Exception!')
 
         else:
 
             # Re-run the loop and stop it:
-            print('[RUN_ELSE] - Tokens generated > We will re-run the loop and start the WS connection again')
+            logger.warning('[RUN_ELSE] - Tokens generated > We will re-run the loop and start the WS connection again')
 
             # Cancel all tasks:
             for task in asyncio.Task.all_tasks():
                 task.cancel()
-            print('[RUN_ELSE] - All tasks cancelled')
+            logger.warning('[RUN_ELSE] - All tasks cancelled')
 
             # Stop the loop to clean:
             self.stop_and_close()
@@ -107,7 +109,7 @@ class DWX_WebSocket_API(DWX_API):
 
         self.event_loop.stop()
         self.event_loop.close()
-        print('[CLOSE] - Loop stopped and closed')
+        logger.warning('[CLOSE] - Loop stopped and closed')
 
         # Launch:
         self.launch_loop_again()
@@ -119,5 +121,5 @@ class DWX_WebSocket_API(DWX_API):
 
         # Create it and assign it:
         asyncio.set_event_loop(asyncio.new_event_loop())
-        print('[LAUNCH] - New event loop set and assigned > Will run the coroutine again..')
+        logger.warning('[LAUNCH] - New event loop set and assigned > Will run the coroutine again..')
         self.run(_symbols=self._symbols)

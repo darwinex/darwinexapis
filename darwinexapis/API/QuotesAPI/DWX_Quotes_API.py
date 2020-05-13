@@ -19,6 +19,9 @@ import os
 from darwinexapis.MINIONS.dwx_graphics_helpers import DWX_Graphics_Helpers
 from darwinexapis.API.dwx_api import DWX_API
 
+import logging
+logger = logging.getLogger()
+
 from matplotlib import pyplot as plt
 from requests import Session
 import pandas as pd
@@ -109,7 +112,7 @@ class DWX_Quotes_API(DWX_API):
             self._df.fillna(method='bfill', inplace=True)
             
             if _plot == False:
-                print(_stream)
+                logger.warning(_stream)
             else:
                 # Axis to pass
                 if len(_symbols) > 1:

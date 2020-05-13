@@ -39,6 +39,9 @@ import pandas as pd
 import gzip, os
 from datetime import timedelta, date, datetime
 
+import logging
+logger = logging.getLogger()
+
 class DWX_TickData_Downloader_API(object):
     
     def __init__(self, dwx_ftp_user, dwx_ftp_pass, dwx_ftp_hostname, dwx_ftp_port):
@@ -66,7 +69,7 @@ class DWX_TickData_Downloader_API(object):
         self._virtual_dl = BytesIO()
         
         if _verbose is True:
-            print("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
+            logger.warning("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
         
         try:
             self._ftpObj.retrbinary("RETR {}".format(_file), self._virtual_dl.write)
@@ -87,7 +90,7 @@ class DWX_TickData_Downloader_API(object):
             self._asset_db[_key] = self._asset_db[_key].astype(float)
             
             if _verbose is True:
-                print('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+                logger.warning('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
 
             # Return the data:
             return self._return_pandas_dataframe_()
@@ -97,7 +100,7 @@ class DWX_TickData_Downloader_API(object):
 
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
 
     def _download_one_hour_data_bid(self, _asset='EURUSD', _date='2017-10-01', _hour='22', _ftp_loc_format='{}/{}_BID_{}_{}.log.gz', _verbose=False):
 
@@ -112,7 +115,7 @@ class DWX_TickData_Downloader_API(object):
         self._virtual_dl = BytesIO()
         
         if _verbose is True:
-            print("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
+            logger.warning("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
         
         try:
             self._ftpObj.retrbinary("RETR {}".format(_file), self._virtual_dl.write)
@@ -133,7 +136,7 @@ class DWX_TickData_Downloader_API(object):
             self._asset_db[_key] = self._asset_db[_key].astype(float)
             
             if _verbose is True:
-                print('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+                logger.warning('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
 
             # Return the data:
             return self._return_pandas_dataframe_()
@@ -143,7 +146,7 @@ class DWX_TickData_Downloader_API(object):
 
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
 
     ##########################################################
 
@@ -166,7 +169,7 @@ class DWX_TickData_Downloader_API(object):
             self._virtual_dl = BytesIO()
         
             if _verbose is True:
-                print("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
+                logger.warning("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
         
             try:
                 self._ftpObj.retrbinary("RETR {}".format(_file), self._virtual_dl.write)
@@ -187,7 +190,7 @@ class DWX_TickData_Downloader_API(object):
                 self._asset_db[_key] = self._asset_db[_key].astype(float)
             
                 if _verbose is True:
-                    print('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+                    logger.warning('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
 
                 # Return the data:
                 hour_df_data = self._return_pandas_dataframe_()
@@ -201,8 +204,8 @@ class DWX_TickData_Downloader_API(object):
 
                 _exstr = "Exception Type {0}. Args:\n{1!r}"
                 _msg = _exstr.format(type(ex).__name__, ex.args)
-                print(_msg)
-                print('[ERROR] - Check if the date provided is a valid trading day')
+                logger.warning(_msg)
+                logger.warning('[ERROR] - Check if the date provided is a valid trading day')
 
         # Return the data finally:
         self._asset_db = {}
@@ -227,7 +230,7 @@ class DWX_TickData_Downloader_API(object):
             self._virtual_dl = BytesIO()
         
             if _verbose is True:
-                print("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
+                logger.warning("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
         
             try:
                 self._ftpObj.retrbinary("RETR {}".format(_file), self._virtual_dl.write)
@@ -248,7 +251,7 @@ class DWX_TickData_Downloader_API(object):
                 self._asset_db[_key] = self._asset_db[_key].astype(float)
             
                 if _verbose is True:
-                    print('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+                    logger.warning('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
 
                 # Return the data:
                 hour_df_data = self._return_pandas_dataframe_()
@@ -262,8 +265,8 @@ class DWX_TickData_Downloader_API(object):
 
                 _exstr = "Exception Type {0}. Args:\n{1!r}"
                 _msg = _exstr.format(type(ex).__name__, ex.args)
-                print(_msg)
-                print('[ERROR] - Check if the date provided is a valid trading day')
+                logger.warning(_msg)
+                logger.warning('[ERROR] - Check if the date provided is a valid trading day')
 
         # Return the data finally:
         self._asset_db = {}
@@ -310,7 +313,7 @@ class DWX_TickData_Downloader_API(object):
                 self._virtual_dl = BytesIO()
         
                 if _verbose is True:
-                    print("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
+                    logger.warning("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
         
                 try:
                     self._ftpObj.retrbinary("RETR {}".format(_file), self._virtual_dl.write)
@@ -331,7 +334,7 @@ class DWX_TickData_Downloader_API(object):
                     self._asset_db[_key] = self._asset_db[_key].astype(float)
             
                     if _verbose is True:
-                        print('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+                        logger.warning('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
 
                     # Return the data:
                     hour_df_data = self._return_pandas_dataframe_()
@@ -345,8 +348,8 @@ class DWX_TickData_Downloader_API(object):
 
                     _exstr = "Exception Type {0}. Args:\n{1!r}"
                     _msg = _exstr.format(type(ex).__name__, ex.args)
-                    print(_msg)
-                    print('[ERROR] - Check if the date provided is a valid trading day')
+                    logger.warning(_msg)
+                    logger.warning('[ERROR] - Check if the date provided is a valid trading day')
 
         # Return the data finally:
         self._asset_db = {}
@@ -380,7 +383,7 @@ class DWX_TickData_Downloader_API(object):
                 self._virtual_dl = BytesIO()
         
                 if _verbose is True:
-                    print("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
+                    logger.warning("\n[INFO] Retrieving file \'{}\' from Darwinex Tick Data Server..".format(_file))
         
                 try:
                     self._ftpObj.retrbinary("RETR {}".format(_file), self._virtual_dl.write)
@@ -401,7 +404,7 @@ class DWX_TickData_Downloader_API(object):
                     self._asset_db[_key] = self._asset_db[_key].astype(float)
             
                     if _verbose is True:
-                        print('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
+                        logger.warning('\n[SUCCESS] {} tick data for {} (hour {}) stored in self._asset_db dict object.\n'.format(_asset, _date, _hour))
 
                     # Return the data:
                     hour_df_data = self._return_pandas_dataframe_()
@@ -415,8 +418,8 @@ class DWX_TickData_Downloader_API(object):
 
                     _exstr = "Exception Type {0}. Args:\n{1!r}"
                     _msg = _exstr.format(type(ex).__name__, ex.args)
-                    print(_msg)
-                    print('[ERROR] - Check if the date provided is a valid trading day')
+                    logger.warning(_msg)
+                    logger.warning('[ERROR] - Check if the date provided is a valid trading day')
 
         # Return the data finally:
         self._asset_db = {}

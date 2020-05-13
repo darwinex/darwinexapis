@@ -18,6 +18,8 @@
 # Do some imports:
 import os, requests, json, time
 from darwinexapis.API.DWX_API_Auth import DWX_API_AUTHENTICATION
+import logging
+logger = logging.getLogger()
 
 class Decorators():
 
@@ -37,7 +39,7 @@ class Decorators():
             # If the time is greater that the time + the expires in > issue refresh:
             if time.time() > self.AUTHENTICATION.expires_in:
 
-                print('\n[DECORATOR] - The expiration time has REACHED > ¡Generate TOKENS!')
+                logger.warning('\n[DECORATOR] - The expiration time has REACHED > ¡Generate TOKENS!')
                 # Generate new credentials:
                 self.AUTHENTICATION._get_access_refresh_tokens_wrapper()
 
@@ -46,7 +48,7 @@ class Decorators():
                 #self._Call_API_(*args, **kwargs)
                 
             else:
-                print('\n[DECORATOR] - The expiration time has NOT reached yet > Continue...')
+                logger.warning('\n[DECORATOR] - The expiration time has NOT reached yet > Continue...')
             return func_to_be_decorated(self, *args,**kwargs)
 
         # Return the decorated function > Something like: <function refreshTokenDecorator.<locals>.wrapper at 0x7f3c5dfd42f0>
@@ -88,7 +90,7 @@ class DWX_API(object):
         self._construct_auth_post_headers()
 
         if _type not in ['GET','POST','PUT', 'DELETE']:
-            print('Bad request type')
+            logger.warning('Bad request type')
             return None
         
         try:
@@ -97,22 +99,22 @@ class DWX_API(object):
                 _ret = requests.get(self._url + _endpoint,
                                     headers=self._auth_headers,
                                     verify=True)
-                print(f'**** FULL URL ENDPOINT ****: {_ret.url}')
+                logger.warning(f'**** FULL URL ENDPOINT ****: {_ret.url}')
             elif _type == 'PUT':
                 _ret = requests.put(self._url + _endpoint,
                                     headers=self._post_headers,
                                     data=_data,
                                     verify=True)
-                print(f'**** FULL URL ENDPOINT ****: {_ret.url}')
+                logger.warning(f'**** FULL URL ENDPOINT ****: {_ret.url}')
             elif _type == 'DELETE':
                 _ret = requests.delete(self._url + _endpoint,
                                        headers=self._auth_headers,
                                        #data=_data,
                                        verify=True)
-                print(f'**** FULL URL ENDPOINT ****: {_ret.url}')
+                logger.warning(f'**** FULL URL ENDPOINT ****: {_ret.url}')
             else:
                 if len(_data) == 0:
-                    print('Data is empty..')
+                    logger.warning('Data is empty..')
                     return None
                 
                 # For DARWIN Quotes API
@@ -131,15 +133,15 @@ class DWX_API(object):
                                          verify=True)
         
             if _json:
-                #print(_ret.json())
+                #logger.warning(_ret.json())
                 return _ret.json()
             else:
                 return _ret
         
         except Exception as ex:
-            print('Type: {0}, Args: {1!r}'.format(type(ex).__name__, ex.args))
-            print(f'Response request code: {_ret.status_code}')
-            print(f'Response request URL: {_ret.url}')
-            print(f'Response request Data: {_ret.text}')
+            logger.warning('Type: {0}, Args: {1!r}'.format(type(ex).__name__, ex.args))
+            logger.warning(f'Response request code: {_ret.status_code}')
+            logger.warning(f'Response request URL: {_ret.url}')
+            logger.warning(f'Response request Data: {_ret.text}')
             
     ##########################################################################

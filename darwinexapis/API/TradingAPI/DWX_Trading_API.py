@@ -18,6 +18,9 @@ import os
 
 from darwinexapis.API.dwx_api import DWX_API
 
+import logging
+logger = logging.getLogger()
+
 class DWX_Trading_API(DWX_API):
     
     def __init__(self,
@@ -30,9 +33,9 @@ class DWX_Trading_API(DWX_API):
         super(DWX_Trading_API, self).__init__(_auth_creds, _api_url,_api_name,_version,_demo)
         
         if _demo:
-            print(f'--+--+--\n[KERNEL] DARWIN Trading API v{_version} initialized in DEMO environment\n--+--+--')
+            logger.warning(f'--+--+--\n[KERNEL] DARWIN Trading API v{_version} initialized in DEMO environment\n--+--+--')
         else:
-            print(f'--+--+--\n[KERNEL] DARWIN Trading API v{_version} initialized in REAL environment\n--+--+--')
+            logger.warning(f'--+--+--\n[KERNEL] DARWIN Trading API v{_version} initialized in REAL environment\n--+--+--')
         
     #########################################################################
     
@@ -45,7 +48,7 @@ class DWX_Trading_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
     
     #########################################################################
     
@@ -59,7 +62,7 @@ class DWX_Trading_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
             
     #########################################################################
     
@@ -145,7 +148,7 @@ class DWX_Trading_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
     
     #########################################################################
     
@@ -170,7 +173,7 @@ class DWX_Trading_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
     
     #########################################################################
     
@@ -189,7 +192,7 @@ class DWX_Trading_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
     
     #########################################################################
     
@@ -211,7 +214,7 @@ class DWX_Trading_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
         
     #########################################################################
     
@@ -234,7 +237,7 @@ class DWX_Trading_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
             
     #########################################################################
     
@@ -250,7 +253,7 @@ class DWX_Trading_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
     
     #########################################################################
     
@@ -270,8 +273,8 @@ class DWX_Trading_API(DWX_API):
             except Exception as ex:
                 _exstr = "Exception Type {0}. Args:\n{1!r}"
                 _msg = _exstr.format(type(ex).__name__, ex.args)
-                print(_msg)
+                logger.warning(_msg)
         else:
-            print('[ERROR] No DARWIN Ticker Symbol provided.. please try again.')
+            logger.warning('[ERROR] No DARWIN Ticker Symbol provided.. please try again.')
     
     #########################################################################

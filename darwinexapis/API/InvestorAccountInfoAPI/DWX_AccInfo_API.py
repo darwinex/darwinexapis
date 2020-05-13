@@ -17,6 +17,8 @@
 import os
 
 from darwinexapis.API.dwx_api import DWX_API
+import logging
+logger = logging.getLogger()
 
 class DWX_AccInfo_API(DWX_API):
     
@@ -30,9 +32,9 @@ class DWX_AccInfo_API(DWX_API):
         super(DWX_AccInfo_API, self).__init__(_auth_creds, _api_url,_api_name,_version,_demo)
         
         if _demo:
-            print(f'--+--+--\n[KERNEL] InvestorAccountInfoAPI v{_version} initialized in DEMO environment\n--+--+--')
+            logger.warning(f'--+--+--\n[KERNEL] InvestorAccountInfoAPI v{_version} initialized in DEMO environment\n--+--+--')
         else:
-            print(f'--+--+--\n[KERNEL] InvestorAccountInfoAPI v{_version} initialized in REAL environment\n--+--+--')
+            logger.warning(f'--+--+--\n[KERNEL] InvestorAccountInfoAPI v{_version} initialized in REAL environment\n--+--+--')
         
     ######################################################################### 
     
@@ -44,7 +46,7 @@ class DWX_AccInfo_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
             
     #########################################################################
     
@@ -56,7 +58,7 @@ class DWX_AccInfo_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
     
     #########################################################################
     
@@ -71,7 +73,7 @@ class DWX_AccInfo_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
     
     #########################################################################
     
@@ -86,7 +88,7 @@ class DWX_AccInfo_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
     
     #########################################################################
     
@@ -101,7 +103,7 @@ class DWX_AccInfo_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
             
     #########################################################################
     
@@ -127,9 +129,9 @@ class DWX_AccInfo_API(DWX_API):
             except Exception as ex:
                 _exstr = "Exception Type {0}. Args:\n{1!r}"
                 _msg = _exstr.format(type(ex).__name__, ex.args)
-                print(_msg)
+                logger.warning(_msg)
         else:
-            print('[ERROR] Invalid Conditional Order Status -> Must be one \
+            logger.warning('[ERROR] Invalid Conditional Order Status -> Must be one \
                   of pending, rejected, executed or cancelled.')
             
     #########################################################################
@@ -147,7 +149,7 @@ class DWX_AccInfo_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
             
     #########################################################################
     
@@ -168,7 +170,7 @@ class DWX_AccInfo_API(DWX_API):
         except Exception as ex:
             _exstr = "Exception Type {0}. Args:\n{1!r}"
             _msg = _exstr.format(type(ex).__name__, ex.args)
-            print(_msg)
+            logger.warning(_msg)
             
     #########################################################################
     
@@ -194,9 +196,9 @@ class DWX_AccInfo_API(DWX_API):
             except Exception as ex:
                 _exstr = "Exception Type {0}. Args:\n{1!r}"
                 _msg = _exstr.format(type(ex).__name__, ex.args)
-                print(_msg)
+                logger.warning(_msg)
         else:
-            print('[ERROR] Invalid Trade Status -> Must be one \
+            logger.warning('[ERROR] Invalid Trade Status -> Must be one \
                   of open or closed.')
             
     #########################################################################
