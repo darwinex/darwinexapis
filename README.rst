@@ -296,7 +296,7 @@ The software is provided on the conditions of the BSD license that you can find 
 
 .. |Docs| image:: https://img.shields.io/badge/Documentation-green.svg
    :alt: Documentation
-   :target: https://https://api.darwinex.com/store/
+   :target: https://api.darwinex.com/store/
 
 .. |Downloads| image:: https://pepy.tech/badge/darwinexapis
    :alt: Number of downloads
