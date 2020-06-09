@@ -55,8 +55,7 @@ class DWX_Info_API(DWX_API):
             
             for darwin in _symbols:
                 
-                logger.warning('\r[DarwinInfoAPI] Getting Quotes for DARWIN {} / {}: ${}'.format(_count, len(_symbols), darwin), 
-                      end='', flush=True)
+                logger.warning('\r[DarwinInfoAPI] Getting Quotes for DARWIN {} / {}: ${}'.format(_count, len(_symbols), darwin))
                 
                 try:
                     
@@ -138,8 +137,7 @@ class DWX_Info_API(DWX_API):
             
             for darwin in _symbols:
                 
-                logger.warning('\r[DarwinInfoAPI] Getting Scores for DARWIN {} / {}: ${}'.format(_count, len(_symbols), darwin),
-                      end='', flush=True)
+                logger.warning('\r[DarwinInfoAPI] Getting Scores for DARWIN {} / {}: ${}'.format(_count, len(_symbols), darwin))
                 
                 try:
             
@@ -234,7 +232,7 @@ class DWX_Info_API(DWX_API):
             # Iterate
             for i in range(_page + 1, _pages):
                 
-                logger.warning('\r[DarwinInfoAPI] Getting page {} of {}'.format(i+1, _pages), end='', flush=True)
+                logger.warning('\r[DarwinInfoAPI] Getting page {} of {}'.format(i+1, _pages))
                 
                 try:
                     _darwins = _darwins + self._Call_API_(_endpoint \
@@ -317,7 +315,7 @@ class DWX_Info_API(DWX_API):
         while _json['page'] != -1:
             
             logger.warning('\r[DarwinInfoAPI] Getting page {} of DARWINs that satisfy criteria..' \
-                  .format(_json['page']), end='', flush=True)
+                  .format(_json['page']))
             
             try:
                 _ret = self._Call_API_(_endpoint,
