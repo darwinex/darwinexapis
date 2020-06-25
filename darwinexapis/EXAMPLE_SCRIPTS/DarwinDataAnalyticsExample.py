@@ -25,9 +25,10 @@ logger.warning(dataFrameReturned)
 # Get quote date for DARWINs:
 # This call will get all the data and will take some time to execute.
 quotes = ANALYZER.get_quotes_from_ftp(darwin='PLF',
-                                      suffix='4.1',
+                                      suffix='3.1',
                                       monthly=False, # If set to False, month/year used > If True ALL data available
-                                      month='01',
-                                      year='2019')
-ANALYZER.save_data_to_csv(quotes, which_path=os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/'), filename='LVS_Quotes')
+                                      month='05',
+                                      year='2018', 
+                                      former_or_new='former')
+ANALYZER.save_data_to_csv(quotes, which_path=os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/'), filename='PLF_Quotes')
 logger.warning(quotes.head())                                      

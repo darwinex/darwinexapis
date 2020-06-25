@@ -16,3 +16,4 @@ docs/html/.buildinfo
 docs/html/.doctrees
 docs/doctrees
 darwinexapis.egg-info
+SystemComponent.log

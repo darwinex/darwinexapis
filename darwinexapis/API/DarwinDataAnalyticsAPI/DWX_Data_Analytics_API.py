@@ -439,7 +439,8 @@ class DWX_Darwin_Data_Analytics_API():
                             suffix='4.1',
                             monthly=True, # If set to False, month/year used.
                             month='01',
-                            year='2019'):
+                            year='2019',
+                            former_or_new='former'):
         
         """Download Quote data for any DARWIN directly via FTP.
                 
@@ -468,6 +469,9 @@ class DWX_Darwin_Data_Analytics_API():
                 e.g. PLF/2019-01/PLF....csv.gz
                 
                 Specifies year for {year}-{month} tuple as above.
+        
+        former_or_new : str
+            Access the former var10 DARWIN data or new var6.5 DARWIN data.
             
         Returns
         -------
@@ -475,76 +479,153 @@ class DWX_Darwin_Data_Analytics_API():
             Pandas DataFrame containing Quotes, indexed by timeframe.
         --
         """
-        quote_files = []
-        roots = []
-        
-        if monthly:
+
+        if former_or_new == 'former':
+
+            quote_files = []
+            roots = []
             
-            tqdm.write(f'\n[KERNEL] Searching for Quote data for DARWIN {darwin}, please wait..', end='')
-            self.server.retrlines(f'NLST {darwin}/quotes/', roots.append)
-            
-            roots_pbar = tqdm(roots, position=0, leave=True)
-            for root in roots_pbar:
+            if monthly:
+                
+                tqdm.write(f'\n[KERNEL] Searching for Quote data for DARWIN (FORMER VAR_10) {darwin}, please wait..', end='')
+                self.server.retrlines(f'NLST {darwin}/_{darwin}_former_var10/quotes/', roots.append)
+                
+                roots_pbar = tqdm(roots, position=0, leave=True)
+                for root in roots_pbar:
+                    try:
+                        roots_pbar.set_description("Getting filenames for month: %s" % root)
+                        root_files = []
+                    
+                        self.server.retrlines(f'NLST {darwin}/_{darwin}_former_var10/quotes/{root}', root_files.append)
+                    
+                        # Finalize filenames
+                        quote_files += [f'{darwin}/_{darwin}_former_var10/quotes/{root}/{root_file}'\
+                                        for root_file in root_files if '{}.{}'.format(darwin, suffix) in root_file]
+                    except Exception as ex:
+                        logger.warning(ex)
+                        return
+                
+            elif pd.to_numeric(month) > 0 and pd.to_numeric(year) > 2010:
+                
+                tqdm.write(f'\n[KERNEL] Asserting data on DARWIN (FORMER VAR_10) for month {year}-{month}, please wait..', end='')    
+                quote_files = []
+                
                 try:
-                    roots_pbar.set_description("Getting filenames for month: %s" % root)
-                    root_files = []
-                
-                    self.server.retrlines(f'NLST {darwin}/quotes/{root}', root_files.append)
-                
-                    # Finalize filenames
-                    quote_files += [f'{darwin}/quotes/{root}/{root_file}'\
-                                    for root_file in root_files if '{}.{}'.format(darwin, suffix) in root_file]
+                    self.server.retrlines(f'NLST {darwin}/_{darwin}_former_var10/quotes/{year}-{month}/', quote_files.append)
+                    quote_files = [f'{darwin}/_{darwin}_former_var10/quotes/{year}-{month}/{quote_file}'\
+                                        for quote_file in quote_files if '{}.{}'.format(darwin, suffix) in quote_file]
                 except Exception as ex:
                     logger.warning(ex)
                     return
-            
-        elif pd.to_numeric(month) > 0 and pd.to_numeric(year) > 2010:
-            
-            tqdm.write(f'\n[KERNEL] Asserting data for month {year}-{month}, please wait..', end='')    
-            quote_files = []
-            
-            try:
-                self.server.retrlines(f'NLST {darwin}/quotes/{year}-{month}/', quote_files.append)
-                quote_files = [f'{darwin}/quotes/{year}-{month}/{quote_file}'\
-                                    for quote_file in quote_files if '{}.{}'.format(darwin, suffix) in quote_file]
-            except Exception as ex:
-                logger.warning(ex)
+            else:
+                logger.warning('\n[ERROR] Please either set monthly=True or ensure both month and year have integer values')
                 return
-        else:
-            logger.warning('\n[ERROR] Please either set monthly=True or ensure both month and year have integer values')
-            return
-            
-        # Process tick data files
-        tqdm.write(f'\n[KERNEL] {len(quote_files)} files retrieved.. post-processing now, please wait..', end='')
-        ticks_df = pd.DataFrame()
-        ticks_pbar = tqdm(quote_files, position=0, leave=True)
-        
-        for tick_file in ticks_pbar:
-            
-            try:
-                ticks_pbar.set_description("Processing %s" % tick_file)
                 
-                # Clear / reinitialize buffer
-                self.retbuf = BytesIO()
+            # Process tick data files
+            tqdm.write(f'\n[KERNEL] {len(quote_files)} files retrieved.. post-processing now, please wait..', end='')
+            ticks_df = pd.DataFrame()
+            ticks_pbar = tqdm(quote_files, position=0, leave=True)
             
-                self.server.retrbinary(f"RETR {tick_file}", self.retbuf.write)
-                self.retbuf.seek(0)
+            for tick_file in ticks_pbar:
                 
-                # Extract data from BytesIO object
-                ret = [line.strip().decode().split(',') for line in gzip.open(self.retbuf)]
-                ticks_df = pd.concat([ticks_df, pd.DataFrame(ret[1:])], axis=0)
+                try:
+                    ticks_pbar.set_description("Processing %s" % tick_file)
+                    
+                    # Clear / reinitialize buffer
+                    self.retbuf = BytesIO()
                 
-            except Exception as ex:
-                logger.warning(ex)
-        
-        # Clean up
-        ticks_df.columns = ['timestamp','quote']
-        ticks_df.timestamp = ticks_df.timestamp.apply(pd.to_numeric)
-        ticks_df.set_index('timestamp', drop=True, inplace=True)
-        ticks_df.index = pd.to_datetime(ticks_df.index, unit='ms')
-        ticks_df.quote = ticks_df.quote.apply(pd.to_numeric)
-        
-        # Return DataFrame
-        return ticks_df.dropna()
+                    self.server.retrbinary(f"RETR {tick_file}", self.retbuf.write)
+                    self.retbuf.seek(0)
+                    
+                    # Extract data from BytesIO object
+                    ret = [line.strip().decode().split(',') for line in gzip.open(self.retbuf)]
+                    ticks_df = pd.concat([ticks_df, pd.DataFrame(ret[1:])], axis=0)
+                    
+                except Exception as ex:
+                    logger.warning(ex)
+            
+            # Clean up
+            ticks_df.columns = ['timestamp','quote']
+            ticks_df.timestamp = ticks_df.timestamp.apply(pd.to_numeric)
+            ticks_df.set_index('timestamp', drop=True, inplace=True)
+            ticks_df.index = pd.to_datetime(ticks_df.index, unit='ms')
+            ticks_df.quote = ticks_df.quote.apply(pd.to_numeric)
+            
+            # Return DataFrame
+            return ticks_df.dropna()
+    
+        elif former_or_new == 'new':
+
+            quote_files = []
+            roots = []
+            
+            if monthly:
+                
+                tqdm.write(f'\n[KERNEL] Searching for Quote data for DARWIN (NEW) {darwin}, please wait..', end='')
+                self.server.retrlines(f'NLST {darwin}/quotes/', roots.append)
+                
+                roots_pbar = tqdm(roots, position=0, leave=True)
+                for root in roots_pbar:
+                    try:
+                        roots_pbar.set_description("Getting filenames for month: %s" % root)
+                        root_files = []
+                    
+                        self.server.retrlines(f'NLST {darwin}/quotes/{root}', root_files.append)
+                    
+                        # Finalize filenames
+                        quote_files += [f'{darwin}/quotes/{root}/{root_file}'\
+                                        for root_file in root_files if '{}.{}'.format(darwin, suffix) in root_file]
+                    except Exception as ex:
+                        logger.warning(ex)
+                        return
+                
+            elif pd.to_numeric(month) > 0 and pd.to_numeric(year) > 2010:
+                
+                tqdm.write(f'\n[KERNEL] Asserting data on DARWIN (NEW) for month {year}-{month}, please wait..', end='')    
+                quote_files = []
+                
+                try:
+                    self.server.retrlines(f'NLST {darwin}/quotes/{year}-{month}/', quote_files.append)
+                    quote_files = [f'{darwin}/quotes/{year}-{month}/{quote_file}'\
+                                        for quote_file in quote_files if '{}.{}'.format(darwin, suffix) in quote_file]
+                except Exception as ex:
+                    logger.warning(ex)
+                    return
+            else:
+                logger.warning('\n[ERROR] Please either set monthly=True or ensure both month and year have integer values')
+                return
+                
+            # Process tick data files
+            tqdm.write(f'\n[KERNEL] {len(quote_files)} files retrieved.. post-processing now, please wait..', end='')
+            ticks_df = pd.DataFrame()
+            ticks_pbar = tqdm(quote_files, position=0, leave=True)
+            
+            for tick_file in ticks_pbar:
+                
+                try:
+                    ticks_pbar.set_description("Processing %s" % tick_file)
+                    
+                    # Clear / reinitialize buffer
+                    self.retbuf = BytesIO()
+                
+                    self.server.retrbinary(f"RETR {tick_file}", self.retbuf.write)
+                    self.retbuf.seek(0)
+                    
+                    # Extract data from BytesIO object
+                    ret = [line.strip().decode().split(',') for line in gzip.open(self.retbuf)]
+                    ticks_df = pd.concat([ticks_df, pd.DataFrame(ret[1:])], axis=0)
+                    
+                except Exception as ex:
+                    logger.warning(ex)
+            
+            # Clean up
+            ticks_df.columns = ['timestamp','quote']
+            ticks_df.timestamp = ticks_df.timestamp.apply(pd.to_numeric)
+            ticks_df.set_index('timestamp', drop=True, inplace=True)
+            ticks_df.index = pd.to_datetime(ticks_df.index, unit='ms')
+            ticks_df.quote = ticks_df.quote.apply(pd.to_numeric)
+            
+            # Return DataFrame
+            return ticks_df.dropna()
     
     ##########################################################################
