@@ -322,23 +322,35 @@ class DWX_Info_API(DWX_API):
                                       _type='POST',
                                       _data=str(_json).replace('\'', '"'))
                 
-                if len(_ret) > 0:
+                if _ret == None or len(_ret) == 0:
+                    _json['page'] = -1 # done
+                    logger.warning('[DEBUG] - Response is None or zero > Setting page to -1...')
+
+                elif len(_ret) > 0:
                     
                     # Update page number
                     _json['page'] += 1
                     
                     # Add output to running list
+                    #logger.warning(f'RETS_: {_rets}')
+                    #logger.warning(f'RET_: {_ret}')
+                    #logger.warning(f'RET_: {type(_ret)}')
+                    #try:
                     _rets = _rets + _ret
+                    #except Exception:
+                    #    _rets = _rets
                     
                     # Sleep between calls
                     time.sleep(_delay)
-                else:
-                    _json['page'] = -1 # done
-                
+
             except AssertionError:
-                logger.warning('[ERROR] name, period, min and max lists must be the same length.')
+                logger.warning('[ERROR] - Name, period, min and max lists must be the same length.')
                 return None
-       
+            
+            except Exception as ex:
+                logger.warning(f'[ERROR] - Another error: {ex}')
+                return None
+
         # Return DataFrame
         return pd.DataFrame(_rets)
     

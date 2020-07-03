@@ -49,6 +49,7 @@ class Decorators():
                 
             else:
                 logger.warning('\n[DECORATOR] - The expiration time has NOT reached yet > Continue...')
+
             return func_to_be_decorated(self, *args,**kwargs)
 
         # Return the decorated function > Something like: <function refreshTokenDecorator.<locals>.wrapper at 0x7f3c5dfd42f0>
@@ -132,6 +133,10 @@ class DWX_API(object):
                                          headers = self._post_headers,
                                          verify=True)
         
+
+            # Check for invalid credentials response: 
+
+
             if _json:
                 #logger.warning(_ret.json())
                 return _ret.json()

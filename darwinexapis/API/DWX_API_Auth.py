@@ -27,6 +27,7 @@ class DWX_API_AUTHENTICATION(object):
          'consumer_secret': '827c785e-f5ed-33bc-87e5-fb9854',
          'refresh_token': '827c785e-f5ed-33bc-87e5-fb9854fe1f80'}'''
  
+        logger.warning(f'[INIT] - Creating AUTH creds...')
         self._auth_creds = _auth_creds
 
         # Put 60 seconds to request the new one and start from there:
@@ -44,13 +45,13 @@ class DWX_API_AUTHENTICATION(object):
             # The access token is None > Raise exception.
             if self.access_token is None:
 
-                raise Exception("[INIT] - Request for access token failed > No access_token returned in the response")
+                raise Exception("[REFRESH_INIT] - Request for access token failed > No access_token returned in the response")
 
             #logger.warning(f'[REFRESH] - New access_token > {self.access_token}')
-            #logger.warning(f'[REFRESH] - New expires_in > {self.expires_in}')
+            logger.warning(f'[REFRESH] - New expires_in > {self.expires_in}')
             #logger.warning(f'[REFRESH] - New refresh_token > {self.refresh_token}')
 
-            logger.warning("[INIT] - Will sleep for some secs...")
+            logger.warning("[REFRESH_INIT] - Will sleep for some secs...")
             time.sleep(3)
 
         except Exception as ex:

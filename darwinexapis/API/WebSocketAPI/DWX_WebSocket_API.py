@@ -34,7 +34,10 @@ class DWX_WebSocket_API(DWX_API):
         self._version = _version
 
         # Initialize the DWX_API class:
-        super(DWX_WebSocket_API, self).__init__(self._auth_creds, self._api_url, self._api_name, self._version)
+        super().__init__(self._auth_creds, self._api_url, self._api_name, self._version)
+
+        # We need to call this because the WSS API doesn't go via the _Call_API_ method.
+        self._construct_auth_post_headers()
         
         # If false, stop polling data from websocket
         self._active = True
@@ -44,18 +47,37 @@ class DWX_WebSocket_API(DWX_API):
         
         #logger.warning(f'[SUBSCRIBE_UP] - AUTH_HEADERS: {self._auth_headers}')
 
-        async with websockets.connect(self._api_url, extra_headers=self._auth_headers) as websocket:
+        # Connect:
+        ws = await websockets.connect(self._api_url, extra_headers=self._auth_headers)
 
-           # Subscribe to symbols
-           await websocket.send(json.dumps({ 'op': 'subscribe', 'productNames' :_symbols}))
+        # Subscribe to symbols
+        await ws.send(json.dumps({ 'op': 'subscribe', 'productNames' :_symbols}))
+        logger.warning('[SUBSCRIBE] - CONNECTED to WS Server!')
            
-           # If _active is True, process data received.
-           while self._active:
+        # If _active is True, process data received.
+        while self._active:
                
-               # If the time is greater that the time + the expires in > issue refresh:s
+            # Check for connection:
+            if not ws.open:
+
+                # Reconnect:
+                try:
+                    # Connect:
+                    ws = await websockets.connect(self._api_url, extra_headers=self._auth_headers)
+
+                    # Subscribe to symbols
+                    await ws.send(json.dumps({ 'op': 'subscribe', 'productNames' :_symbols}))
+                    logger.warning('[SUBSCRIBE] - ¡RECONNECTED to WS Server!')
+
+                except Exception:
+                    logger.warning('[SUBSCRIBE] - Unable to reconnect, trying again...')
+
+            # While active, do work:
+            try:
+                # If the time is greater that the time + the expires in > issue refresh:
                 if time.time() > self.AUTHENTICATION.expires_in:
 
-                    logger.warning('\n[SUBSCRIBE] - The expiration time has REACHED > ¡Generate TOKENS!')
+                    logger.warning('[SUBSCRIBE] - The expiration time has REACHED > ¡Generate TOKENS!')
                     # Generate new token:
                     self.AUTHENTICATION._get_access_refresh_tokens_wrapper()
 
@@ -64,15 +86,19 @@ class DWX_WebSocket_API(DWX_API):
                     return
 
                 else:
-                    logger.warning('\n[SUBSCRIBE] - The expiration time has NOT reached yet > Continue...')
+                    logger.warning('[SUBSCRIBE] - The expiration time has NOT reached yet > Continue...')
 
                 # Keep returning:
-                _ret = await websocket.recv()
+                self._ret = await ws.recv()
                
-                # Insert your Quote handling logic here
+                ###################### Insert your Quote handling logic here ######################
                 # {"op":"hb","timestamp":1587838905842} > Heartbeats.
-                # Reference: https://api.darwinex.com/store/site/pages/doc-viewer.jag?docName=Product%20Quotes%20WebSocket%20subscription%20walkthrough&name=QuoteWebSocket&version=1.0.0&provider=admin&
-                logger.warning(_ret)
+                # Reference: https://api.darwinex.com/store/site/pages/doc-viewer.jag?docName=Product%20Quotes%20WebSocket%20subscription%20walkthroughname=QuoteWebSocket& version=1.0.0&provider=admin&
+                logger.warning(f'[SUBSCRIBE] - RETURNED MESSAGE: {self._ret}')
+                ###################### Insert your Quote handling logic here ######################
+            
+            except Exception as ex:
+                logger.warning(f'[SUBSCRIBE] - Ex: {ex}')
 
     def run(self, _symbols=['DWZ.4.7','DWC.4.20','LVS.4.20','SYO.4.24','YZZ.4.20']):
         
@@ -116,8 +142,8 @@ class DWX_WebSocket_API(DWX_API):
 
     def launch_loop_again(self):
 
-        # Execute again the DWX_API init:
-        super(DWX_WebSocket_API, self).__init__(self._auth_creds, self._api_url, self._api_name, self._version)
+        # We need to call this because the WSS API doesn't go via the _Call_API_ method.
+        self._construct_auth_post_headers()
 
         # Create it and assign it:
         asyncio.set_event_loop(asyncio.new_event_loop())
