@@ -133,20 +133,27 @@ class DWX_API(object):
                                          headers = self._post_headers,
                                          verify=True)
         
+            # Log the response:
+            logger.warning(_ret)
+            logger.warning(_ret.text)
 
-            # Check for invalid credentials response: 
-
-
+            # Check for JSON conversion:
             if _json:
-                #logger.warning(_ret.json())
                 return _ret.json()
             else:
                 return _ret
         
         except Exception as ex:
+
+            # When the response is not converted to JSON, we will enter here.
+            # When invalid credentials, the response is not JSON, so we will enter here.
+
             logger.warning('Type: {0}, Args: {1!r}'.format(type(ex).__name__, ex.args))
             logger.warning(f'Response request code: {_ret.status_code}')
             logger.warning(f'Response request URL: {_ret.url}')
             logger.warning(f'Response request Data: {_ret.text}')
+
+            # Return the response to handle it:
+            return _ret.text
             
     ##########################################################################
