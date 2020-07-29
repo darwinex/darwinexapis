@@ -321,7 +321,7 @@ class DWX_Info_API(DWX_API):
                 _ret = self._Call_API_(_endpoint,
                                       _type='POST',
                                       _data=str(_json).replace('\'', '"'))
-                
+
                 if _ret == None or len(_ret) == 0:
                     _json['page'] = -1 # done
                     logger.warning('[DEBUG] - Response is None or zero > Setting page to -1...')
@@ -342,6 +342,10 @@ class DWX_Info_API(DWX_API):
                     
                     # Sleep between calls
                     time.sleep(_delay)
+
+                elif _ret['status'] == 500:
+
+                    logger.warning('[DEBUG] - Internal Server Error > Need to check further.')
 
             except AssertionError:
                 logger.warning('[ERROR] - Name, period, min and max lists must be the same length.')
