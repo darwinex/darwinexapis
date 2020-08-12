@@ -414,6 +414,10 @@ class DWX_Info_API(DWX_API):
                                                   _query_string), 
                                                   _type='GET',
                                                   _data='')
+
+                # Sleep
+                if _delay > 0:
+                    time.sleep(_delay)
                 
                 # Parse data into DataFrame
                 _candles[_darwin] = pd.DataFrame(
