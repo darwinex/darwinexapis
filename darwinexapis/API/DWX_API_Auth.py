@@ -31,7 +31,7 @@ class DWX_API_AUTHENTICATION(object):
         self._auth_creds = _auth_creds
 
         # Put 60 seconds to request the new one and start from there:
-        self.expires_in = time.time() + 60
+        self.expires_in = time.time() + 3300
         logger.warning(f'[INIT] - Access token will be created again at {self.expires_in} UNIX timestamp')
  
     def _get_access_refresh_tokens_wrapper(self):
