@@ -23,6 +23,8 @@ on new developments and features.
 **NOTE 2:** As the package evolves, we will provide code examples that will deal with exception handling and practical use cases of it. At this point 
 in time, the package is released **AS IS** and the user is responsible of handling any specific cases for their application.
 
+**NOTE 3:** In each DARWIN API definition you will find a ``_version`` attribute. Updates to the APIs could be released from time to time and that will be highlighted as new API versions that you will find in the `APIs documentation <https://api.darwinex.com/store/>`_. New Darwinex users will be subscribed by default to the latest API versions (i.e. the ones shown in the documentation link above) and NOT to the old ones. Old versions of the APIs are deprecated but not actually removed, so a Darwinex user that is not brand new to the ecosystem could still use previous versions of the APIs if those were available when he/she joined.
+
 API Access Tokens
 ==================
 

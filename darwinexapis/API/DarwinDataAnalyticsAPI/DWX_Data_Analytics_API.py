@@ -55,7 +55,11 @@ class DWX_Darwin_Data_Analytics_API():
                                   'RETURN_DIVERGENCE': ['timestamp','quote','quote_after_avg_divergence'],
                                   'MONTHLY_DIVERGENCE': ['timestamp','average_divergence','monthly_divergence'],
                                   'DAILY_FIXED_DIVERGENCE': ['timestamp','profit_difference'],
-                                  'DAILY_REAL_DIVERGENCE': ['timestamp','profit_difference']}
+                                  'DAILY_REAL_DIVERGENCE': ['timestamp','profit_difference'],
+                                  'POSITIONS': ['timestamp','periods','array','total_pos_number','max_open_trades'],
+                                  'TRADES': ['timestamp','periods','array'],
+                                  'TRADE_CONSISTENCY': ['timestamp','periods','array'],
+                                  'ROTATION': ['timestamp','periods','daily_rotation']}
     
         # Setup data container
         self.retbuf = BytesIO()
@@ -629,3 +633,103 @@ class DWX_Darwin_Data_Analytics_API():
             return ticks_df.dropna()
     
     ##########################################################################
+
+    def get_positions(self, darwin):
+        
+        """Offers information about positions every day.
+                
+        Parameters
+        ----------
+        darwin : str
+            DARWIN ticker symbol, e.g. $PLF
+            
+        Returns
+        -------
+        df
+            Pandas DataFrame
+        --
+        """
+        
+        # Set required data type
+        data_type = 'POSITIONS'
+        
+        # Get raw data into pandas dataframe
+        df = self.get_analytics(darwin, data_type)
+                
+        # Return processed data
+        return df.dropna()
+
+    def get_trades(self, darwin):
+        
+        """Gives information about the result of closed trades, aggregated by instrument.
+                
+        Parameters
+        ----------
+        darwin : str
+            DARWIN ticker symbol, e.g. $PLF
+            
+        Returns
+        -------
+        df
+            Pandas DataFrame
+        --
+        """
+        
+        # Set required data type
+        data_type = 'TRADES'
+        
+        # Get raw data into pandas dataframe
+        df = self.get_analytics(darwin, data_type)
+                
+        # Return processed data
+        return df.dropna()
+
+    def get_trades_consistency(self, darwin):
+        
+        """Shows information regarding the results of a group of trades per day.
+                
+        Parameters
+        ----------
+        darwin : str
+            DARWIN ticker symbol, e.g. $PLF
+            
+        Returns
+        -------
+        df
+            Pandas DataFrame
+        --
+        """
+        
+        # Set required data type
+        data_type = 'TRADE_CONSISTENCY'
+        
+        # Get raw data into pandas dataframe
+        df = self.get_analytics(darwin, data_type)
+                
+        # Return processed data
+        return df.dropna()
+
+    def get_rotation(self, darwin):
+        
+        """Contains information about daily rotation.
+                
+        Parameters
+        ----------
+        darwin : str
+            DARWIN ticker symbol, e.g. $PLF
+            
+        Returns
+        -------
+        df
+            Pandas DataFrame
+        --
+        """
+        
+        # Set required data type
+        data_type = 'ROTATION'
+        
+        # Get raw data into pandas dataframe
+        df = self.get_analytics(darwin, data_type)
+        
+        # Return processed data
+        return df.dropna()

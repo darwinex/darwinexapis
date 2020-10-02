@@ -7,8 +7,8 @@ logger = logging.getLogger()
 from darwinexapis.API.DarwinDataAnalyticsAPI.DWX_Data_Analytics_API import DWX_Darwin_Data_Analytics_API
 
 # Create the object:
-FTP_CRED = {"username": "your_alpha_username",
-            "password": "your_alpha_password",
+FTP_CRED = {"username": "YOUR_USERNAME",
+            "password": "YOUR_PASSWORD",
             "server": "darwindata.darwinex.com",
             "port": 21}
 
@@ -32,3 +32,16 @@ quotes = ANALYZER.get_quotes_from_ftp(darwin='PLF',
                                       former_or_new='former')
 ANALYZER.save_data_to_csv(quotes, which_path=os.path.expandvars('${HOME}/Desktop/darwinexapis/darwinexapis/EXAMPLE_DATA/'), filename='PLF_Quotes')
 logger.warning(quotes.head())                                      
+
+# Get other relevant data from DARWINs:
+dataFrameReturned = ANALYZER.get_analytics(darwin='LVS', data_type='POSITIONS')
+logger.warning(dataFrameReturned.head(20)) 
+
+dataFrameReturned = ANALYZER.get_analytics(darwin='LVS', data_type='TRADES')
+logger.warning(dataFrameReturned.head(20)) 
+
+dataFrameReturned = ANALYZER.get_analytics(darwin='LVS', data_type='TRADE_CONSISTENCY')
+logger.warning(dataFrameReturned.head(20)) 
+
+dataFrameReturned = ANALYZER.get_analytics(darwin='LVS', data_type='ROTATION')
+logger.warning(dataFrameReturned.head(20))  
