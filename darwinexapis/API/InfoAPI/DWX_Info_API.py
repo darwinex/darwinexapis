@@ -431,7 +431,7 @@ class DWX_Info_API(DWX_API):
                 _exstr = "Exception Type {0}. Args:\n{1!r}"
                 _msg = _exstr.format(type(ex).__name__, ex.args)
                 logger.warning(_msg)
-                return None
+                logger.warning("DARWIN <{_darwin}> not included -> Not enough look-back period")
         
         return _candles
     
