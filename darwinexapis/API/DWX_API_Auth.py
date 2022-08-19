@@ -91,7 +91,7 @@ class DWX_API_AUTHENTICATION(object):
         # This way we have the base64 codification of the key:secret into a string, which is required for the request to the API.
         encoded_key_secret = base64.b64encode(bytes_string).decode('utf-8')
 
-        # Creating a headers dictionary to have all data nicely formatted for the request
+        # Creating a headers dictionary to have all headers data nicely formatted for the request
         headers = CaseInsensitiveDict()
         headers["Authorization"] = f"Basic {encoded_key_secret}"
         headers["Content-Type"] = "application/x-www-form-urlencoded"
