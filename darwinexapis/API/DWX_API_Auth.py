@@ -1,5 +1,6 @@
 ### Do some imports:
 import os, pprint, json, base64, requests, time
+from requests.structures import CaseInsensitiveDict
 import pandas as pd
 import logging
 logger = logging.getLogger()
@@ -68,19 +69,35 @@ class DWX_API_AUTHENTICATION(object):
             self._auth_creds['refresh_token'] = self.refresh_token
             #logger.warning(f"[REFRESH_ELSE] - NEW CREDS: {self._auth_creds}")
 
-    def _get_access_refresh_tokens_(self, client_id, client_secret, refresh_token, token_url='https://api.darwinex.com/token'):
+    def _get_access_refresh_tokens_(self, consumer_key, consumer_secret, refresh_token, token_url='https://api.darwinex.com/token'):
 
         # Refs: https://auth0.com/docs/tokens/guides/use-refresh-tokens
         # Refs: https://help.darwinex.com/api-walkthrough
         # Refs: https://help.darwinex.com/
     
-        header_data = {'client_id': client_id, # Consumer key in the Darwinex web
-                       'client_secret': client_secret} # Consumer secret in the Darwinex web
+        # header_data = {'client_key': client_key, # Consumer key in the Darwinex web
+        #                'client_secret': client_secret} # Consumer secret in the Darwinex web
 
-        data = {'grant_type': 'refresh_token',
-                'refresh_token': refresh_token}
-    
-        headers = {'Authorization': 'Basic {}'.format(base64.b64encode(bytes('{}:{}'.format(header_data['client_id'], header_data['client_secret']).encode('utf-8'))).decode('utf-8'))}
+        # data = {'grant_type': 'refresh_token',
+        #         'refresh_token': refresh_token}
+
+        # Creating the string that will need to be encoded into base64. The needed format is consumer_key:consumer_secret.
+        string_to_encode = f"{consumer_key}:{consumer_secret}"
+
+        # Converting the 'string_to_encode' into a bytes-like object, which is required by the base64 encoder.
+        bytes_string = bytes(string_to_encode.encode('utf-8'))
+
+        # Encoding the 'bytes_string' into base64. This also generates a bytes-like object. Then decoding it again into a string.
+        # This way we have the base64 codification of the key:secret into a string, which is required for the request to the API.
+        encoded_key_secret = base64.b64encode(bytes_string).decode('utf-8')
+
+        # Creating a headers dictionary to have all data nicely formatted for the request
+        headers = CaseInsensitiveDict()
+        headers["Authorization"] = f"Basic {encoded_key_secret}"
+        headers["Content-Type"] = "application/x-www-form-urlencoded"
+
+        # Prepearing the data with the current refresh_token
+        data = f"grant_type=refresh_token&refresh_token={refresh_token}"
 
         try:
             _response = requests.post(token_url, headers=headers, data=data, verify=True, allow_redirects=False)
